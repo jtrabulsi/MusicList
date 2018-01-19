@@ -4,10 +4,18 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest"
+    "start-w": "webpack-dev-server",
+    "test": "jest",
+    "lint": "eslint .",
+    "build-dev": "webpack --config webpack.config.js --progress --profile --colors"
   },
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.1.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-es2017": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -16,18 +24,29 @@
     "express-session": "^1.10.1",
     "mongoose": "^5.0.0",
     "morgan": "~1.9.0",
+    "node-sass": "^4.7.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
-    "serve-favicon": "~2.4.5"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "sass-loader": "^6.0.6",
+    "serve-favicon": "~2.4.5",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.4",
+    "webpack-hot-middleware": "^2.21.0"
   },
   "devDependencies": {
     "eslint": "^4.15.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jest": "^21.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
     "jest": "^22.1.3",
-    "supertest": "^3.0.0"
+    "react-hot-loader": "^4.0.0-beta.15",
+    "supertest": "^3.0.0",
+    "webpack-dev-server": "^2.11.0"
   }
 }
