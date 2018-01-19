@@ -12,7 +12,6 @@ const expressSession = require('express-session')({
   resave: false,
   saveUninitialized: false,
 });
-
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -23,6 +22,7 @@ const User = require('./models/user');
 const index = require('./routes/index');
 const api = require('./routes/api/index');
 const users = require('./routes/api/users');
+const authentication = require('./routes/api/authentication');
 
 const app = express();
 
@@ -60,6 +60,7 @@ app.use(webpackHotMiddleware(webpackCompiler, {
 
 app.use('/api', api);
 app.use('/api/users', users);
+app.use('/api/authentication', authentication);
 app.use('/*', index);
 
 // Configure Passport
