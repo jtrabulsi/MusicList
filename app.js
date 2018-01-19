@@ -16,7 +16,7 @@ const expressSession = require('express-session')({
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddlware = require('webpack-hot-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 
 const User = require('./models/user');
 
@@ -54,7 +54,7 @@ app.use(webpackDevMiddleware(webpackCompiler, {
     'errors-only': true,
   },
 }));
-app.use(webpackHotMiddlware(webpackCompiler, {
+app.use(webpackHotMiddleware(webpackCompiler, {
   log: console.log,
 }));
 
