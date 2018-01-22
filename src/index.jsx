@@ -1,42 +1,24 @@
-// Default export from a module
 import React from 'react';
-// Individual method exports from a module
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { Provider } from 'react-redux';
-
-// CSS from a module
 import 'bootstrap/dist/css/bootstrap.css';
-
-// CSS from a local file
 import './css/musiclist.scss';
 
-// Default export from a local file
-import DevTools from './components/shared/DevTools';
-import configureStore from './store';
-
-import TemplateContainer from './components/TemplateContainer';
-
-const Store = configureStore();
+import Template from './components/Template';
 
 const renderApp = (Component) => {
   render(
     <AppContainer>
-      <Provider store={Store}>
-        <div>
-          <Component />
-          <DevTools />
-        </div>
-      </Provider>
+      <Component headline="Test Headline" count={5678} showCount />
     </AppContainer>,
     document.querySelector('#react-app'),
   );
 };
 
-renderApp(TemplateContainer);
+renderApp(Template);
 
 if (module && module.hot) {
-  module.hot.accept('./components/TemplateContainer', () => {
-    renderApp(TemplateContainer);
+  module.hot.accept('./components/Template', () => {
+    renderApp(Template);
   });
 }
