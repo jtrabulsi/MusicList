@@ -2,7 +2,7 @@ const { resolve } = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const CSSOutputLocation = process.env.NODE_ENV === 'production' ?
+const cssOutputLocation = process.env.NODE_ENV === 'production' ?
   'public/stylesheets/style-prod.css' :
   'stylesheets/style.css';
 
@@ -37,7 +37,7 @@ module.exports = {
         loader: 'babel-loader',
       },
       {
-        test: /\.css?$/,
+        test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: 'css-loader',
@@ -62,7 +62,7 @@ module.exports = {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin(CSSOutputLocation),
+    new ExtractTextPlugin(cssOutputLocation),
   ],
 };
 
@@ -78,4 +78,3 @@ if (process.env.NODE_ENV !== 'production') {
   );
   module.exports.plugins.unshift(new webpack.HotModuleReplacementPlugin());
 }
-
