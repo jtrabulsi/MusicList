@@ -54,30 +54,66 @@ router.post('/register', async (req, res) => {
   const query = User.findOne({ email: req.body.email });
   const foundUser = await query.exec();
 
-  if (foundUser) { return res.send(JSON.stringify({ error: 'Email or username already exists.'})); }
+  if (foundUser) { return res.send(JSON.stringify({ error: 'Email or username already exists' })); }
   // Create a user object to save, using values from incoming JSON
   if (!foundUser) {
     const newUser = new User(req.body);
 
     // Save, via Passport's "register" method, the user
-    return User.register(newUser, req.body.password, (err, user) => {
+    return User.register(newUser, req.body.password, (err) => {
       // If there's a problem, send back a JSON object with the error
       if (err) {
         return res.send(JSON.stringify({ error: err }));
       }
       // Otherwise log them in
-      return passport.authenticate('local')(req,res, () => {
+      return passport.authenticate('local')(req, res, () => {
         // If logged in, we should have user info to send back
         if (req.user) {
           return res.send(JSON.stringify(req.user));
         }
         // Otherwise return an error
-        return res.send(JSON.stringify({ error: 'There was an error registering.'}));
+        return res.send(JSON.stringify({ error: 'There was an error registering the user' }));
       });
     });
-  } 
-  // return an error is all else fails
-  return res.send(JSON.stringify({ error: 'There was an error registering the user.'}));
+  }
+
+  // return an error if all else fails
+  return res.send(JSON.stringify({ error: 'There was an error registering the user' }));
+});
+
+// POST to savepassword
+router.post('/savepassword', async (req, res) => {
+  let result;
+  try {
+    // look up user in the DB based on reset hash
+    const query = User.findOne({ passwordReset: req.body.hash });
+    const foundUser = await query.exec();
+
+    // If the user exists save their new password
+    if (foundUser) {
+      // user passport's built-in password set method
+      foundUser.setPassword(req.body.password, (err) => {
+        if (err) {
+          result = res.send(JSON.stringify({ error: 'Password could not be saved. Please try again' }));
+        } else {
+          // once the password's set, save the user object
+          foundUser.save((error) => {
+            if (error) {
+              result = res.send(JSON.stringify({ error: 'Password could not be saved. Please try again' }));
+            } else {
+              // Send a success message
+              result = res.send(JSON.stringify({ success: true }));
+            }
+          });
+        }
+      });
+    } else {
+      result = res.send(JSON.stringify({ error: 'Reset hash not found in database.' }));
+    }
+  } catch (err) {
+    result = res.send(JSON.stringify({ error: 'There was an error connecting to the database.' }));
+  }
+  return result;
 });
 
 // POST to saveresethash
@@ -99,15 +135,14 @@ router.post('/saveresethash', async (req, res) => {
 
     foundUser.save((err) => {
       if (err) { result = res.send(JSON.stringify({ error: 'Something went wrong while attempting to reset your password. Please Try again' })); }
-      result = res.send(JSON.stringify({ success: true }));
 
-       // Put together the email
-       const emailData = {
-        from: 'MusicList <postmaster@${appConfig.mailgun.domain}>',
+      // Put together the email
+      const emailData = {
+        from: `CloseBrace <postmaster@${appConfig.mailgun.domain}>`,
         to: foundUser.email,
         subject: 'Reset Your Password',
         text: `A password reset has been requested for the MusicList account connected to this email address. If you made this request, please click the following link: https://musiclist.com/account/change-password/${foundUser.passwordReset} ... if you didn't make this request, feel free to ignore it!`,
-        html: `<p>A password reset has been requested for the MusicList account connected to this email address. If you made this request, please click the following link: <a href="https://musiclist.com/account/change-password/${foundUser.passwordReset}&quot; target="_blank">https://musiclist.com/account/change-password/${foundUser.passwordReset}</a>.</p><p>If you didn't make this request, feel free to ignore it!</p>`,
+        html: `<p>A password reset has been requested for the MusicList account connected to this email address. If you made this request, please click the following link: <a href="https://musiclist.com/account/change-password/${foundUser.passwordReset}" target="_blank">https://musiclist.com/account/change-password/${foundUser.passwordReset}</a>.</p><p>If you didn't make this request, feel free to ignore it!</p>`,
       };
 
       // Send it
@@ -127,3 +162,4 @@ router.post('/saveresethash', async (req, res) => {
 });
 
 module.exports = router;
+

@@ -1,3 +1,4 @@
+require('babel-register');
 const { resolve } = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -35,6 +36,17 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components|public\/)/,
         loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'es2017'],
+        },
+      },
+      {
+        test: /\.js?$/,
+        exclude: /(node_modules|bower_components|public\/)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'es2017'],
+        },
       },
       {
         test: /\.css$/,
