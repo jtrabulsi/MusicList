@@ -144,9 +144,11 @@ export function logUserOut() {
   return async (dispatch) => {
     // clear the error box if it's displayed
     dispatch(clearError());
+    console.log("cleared")
 
     // turn on spinner
     dispatch(incrementProgress());
+    console.log("spinner on")
 
     // contact the API
     await fetch(

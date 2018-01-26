@@ -12,14 +12,16 @@ class TemplateContainer extends React.Component {
     this.checkUserSession = this.checkUserSession.bind(this);
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     // Before the component mounts, check for an existing user session
-    this.checkUserSession();
+    await this.checkUserSession();
+    // replace this console.log with whatever code that relies on checkUserSession to have completed
+    console.log('test');
   }
 
-  checkUserSession() {
+  async checkUserSession() {
     const { dispatch } = this.props;
-    dispatch(checkSession());
+    await dispatch(checkSession());
   }
 
   render() {
